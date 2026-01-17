@@ -1,4 +1,7 @@
 grammar = {
+    "<start>": [
+        ["IF", "<cond>", "THEN", "<strategy>", "ELSE", "<strategy>"]
+    ],
     "<strategy>": [
         ["IF", "<cond>", "THEN", "<strategy>", "ELSE", "<strategy>"],
         ["<action>"]
