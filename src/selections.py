@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def roulette_selection(objective_values, population, number_of_offspring):
+def roulette_selection(objective_values, population, number_of_offspring, **kwargs):
     population_size = len(population)
     fitness_values = objective_values - objective_values.min()
 

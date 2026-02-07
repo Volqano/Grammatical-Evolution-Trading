@@ -81,12 +81,6 @@ def vectorized_evaluate_strategy(strategy, data_dict, n_rows):
 
 
 def backtest(rule, data, initial_cash):
-    """
-    rule - decision rules used to calculating return
-    ticker - ticker on which we will be testing rule
-
-    return: total return by using given decision rule
-    """
     cash = initial_cash
     stock = 0
     for i in range(len(data)):
@@ -128,3 +122,83 @@ def fast_backtest(rule, data_dict, initial_cash):
 
     total_return = cash + (stock * prices[-1]) - initial_cash
     return total_return
+
+
+def plot_backtest(rule, data_dict, initial_cash=1000):
+    prices = data_dict["Close"]
+    if hasattr(prices, 'values'):
+        prices = prices.values
+    n_rows = len(prices)
+
+    actions = vectorized_evaluate_strategy(rule, data_dict, n_rows)
+
+    cash = initial_cash
+    stock = 0.0
+    equity_curve = np.zeros(n_rows)
+
+    for i in range(n_rows):
+        current_price = prices[i]
+        action = actions[i]
+
+        if action == "BUY" and stock == 0:
+            stock = cash / current_price
+            cash = 0.0
+        elif action == "SELL" and stock > 0:
+            cash = stock * current_price
+            stock = 0.0
+
+        total_value = cash + (stock * current_price)
+        equity_curve[i] = total_value
+
+    return equity_curve
+
+
+def fitness_sharpe_ratio(rule, data_dict, initial_cash=1000):
+    prices = data_dict["Close"]
+    if hasattr(prices, 'values'):
+        prices = prices.values
+    n_rows = len(prices)
+
+    actions = vectorized_evaluate_strategy(rule, data_dict, n_rows)
+
+    cash = initial_cash
+    stock = 0.0
+    equity_curve = np.zeros(n_rows)
+
+    for i in range(n_rows):
+        current_price = prices[i]
+        action = actions[i]
+
+        if action == "BUY" and stock == 0:
+            stock = cash / current_price
+            cash = 0.0
+        elif action == "SELL" and stock > 0:
+            cash = stock * current_price
+            stock = 0.0
+
+        total_value = cash + (stock * current_price)
+        equity_curve[i] = total_value
+
+    # SHARPE RATIO
+
+    # (today - yesterday) / yesterday
+    daily_returns = np.diff(equity_curve) / equity_curve[:-1]
+
+    if len(daily_returns) == 0:
+        return 0.0
+
+    std_dev = np.std(daily_returns)
+    mean_return = np.mean(daily_returns)
+
+    if std_dev == 0:
+        return 0.0
+
+    # Annualized sharpe ratio
+    sharpe = (mean_return / std_dev) * np.sqrt(252)
+
+    total_return = (equity_curve[-1] - initial_cash) / initial_cash
+
+    if total_return < 0:
+        return -10.0 + total_return
+
+    return sharpe
