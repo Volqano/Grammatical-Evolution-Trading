@@ -23,7 +23,7 @@ Algorytm działa na podstawie SGA z dodatkową funkcja zamiany genotypu na fenot
 - **Reprezentacja** - Genotypem jest tablica liczb całkowitych. Algorytm w celu zamiany genotypu na fenotyp dokonuje wyboru reguły w gramatyce poprzez operacje modulo. Fenotypem jest wygenerowana strategia składająca się z reguł gramatyki.
 - **Operatory genetyczne**: 
     -  Selekcja - Wykorzystuje selekcje turniejową, jest szybka, odporna na różny fitness i zachowuje dobrą różnorodność populacji
-    - Crossover - Wykorzystuje One-point crossover, zachowuje ona spójne bloki w genotypie, w tym problemie spójne bloki lączą się w sensowne fragmenty reguły
+    - Crossover - Wykorzystuje One-point oraz Two-point crossover, zachowują one spójne bloki w genotypie, w tym problemie spójne bloki lączą się w sensowne fragmenty reguły
     - Mutacja - Wykorzystuje losową mutacje
 
 ### 4. Szegółowy opis implementacji użytych metod

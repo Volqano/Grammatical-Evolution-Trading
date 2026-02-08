@@ -23,9 +23,6 @@ def build_cond(elements):
 
 
 def map_genotype_to_fenotype(genotype, grammar, max_depth):
-    """
-    Zamienia liste intow na strategie
-    """
     idx = 0
 
     builders = {
